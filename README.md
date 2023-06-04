@@ -1,2 +1,3 @@
 # ImageNK
-Show images in your pnx server!
+Show images in your server!  
+Modified version of Nukkit-MOT supported

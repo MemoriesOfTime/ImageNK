@@ -5,13 +5,16 @@ import cn.daoge.imagenk.imagemap.ImageMap;
 import cn.daoge.imagenk.imagemapstorage.ImageMapStorage;
 import cn.daoge.imagenk.imageprovider.ImageProvider;
 import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockEntityHolder;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockItemFrame;
+import cn.nukkit.blockentity.BlockEntity;
+import cn.nukkit.blockentity.BlockEntityItemFrame;
 import cn.nukkit.item.ItemMap;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.SimpleAxisAlignedBB;
+import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.Tag;
 import lombok.Getter;
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -275,16 +278,26 @@ public class SimpleImageMapManager implements ImageMapManager {
         //获得地图
         var itemMap = new ItemMap();
         itemMap.setImage(subImage);
-
+        //放置方块
         var frame = new BlockItemFrame();
         frame.position(pos);
         frame.setBlockFace(face);
         frame.setStoringMap(true);
-        //设置显示地图
-        //这里我们不更新方块防止展示框掉落
-        var blockEntity = BlockEntityHolder.setBlockAndCreateEntity(frame, true, false);
-        blockEntity.setItem(itemMap);
-        if (rotation != null) blockEntity.setItemRotation(getMapFrameRotationByFace(rotation, down));
+        level.setBlock(pos, frame);
+        //生成并设置实体
+        CompoundTag nbt = new CompoundTag()
+                .putString("id", BlockEntity.ITEM_FRAME)
+                .putInt("x", (int) frame.x)
+                .putInt("y", (int) frame.y)
+                .putInt("z", (int) frame.z)
+                .putByte("ItemRotation", 0)
+                .putFloat("ItemDropChance", 1.0f);
+        if (BlockEntity.createBlockEntity(BlockEntity.ITEM_FRAME, frame.getChunk(), nbt) instanceof BlockEntityItemFrame blockEntity) {
+            blockEntity.setItem(itemMap);
+            if (rotation != null) {
+                blockEntity.setItemRotation(getMapFrameRotationByFace(rotation, down));
+            }
+        }
     }
 
     /**
