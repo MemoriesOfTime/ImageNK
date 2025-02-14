@@ -112,7 +112,7 @@ public class ImageNK extends PluginBase implements Listener {
         if (!event.getAction().equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) ||
                 item == null ||
                 item.getId() != IMAGE_ITEM_ID ||
-                !item.getNamedTag().contains(KEY_IMAGE_NAME)) return;
+                !item.getOrCreateNamedTag().contains(KEY_IMAGE_NAME)) return;
 
         //撤销事件
         event.setCancelled();
