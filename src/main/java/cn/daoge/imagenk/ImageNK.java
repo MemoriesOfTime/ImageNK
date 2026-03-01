@@ -211,17 +211,17 @@ public class ImageNK extends PluginBase implements Listener {
         pos1BlockFace.remove(player);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     protected void onBlockUpdate(BlockUpdateEvent event) {
         event.setCancelled(this.shouldBlockEventCancelled(event.getBlock()));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     protected void onBlockBreak(BlockBreakEvent event) {
         event.setCancelled(this.shouldBlockEventCancelled(event.getBlock()));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     protected void onItemFrameDrop(ItemFrameDropItemEvent event) {
         event.setCancelled(this.shouldBlockEventCancelled(event.getBlock()));
     }
